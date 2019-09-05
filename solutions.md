@@ -176,4 +176,46 @@ int main() {
 
 
 
+## Ch 3 완전 탐색 1
+
+### 순열 사용하기
+
+* 문제: [차이를 최대로 10819](https://www.acmicpc.net/problem/10819)
+* 굉장히 간단한 문제이다. 입력받은 수를 오름차순으로 한번 정렬해준 후, 계속해서 순열을 구한다. 그리고 매 순열을 구할 때 마다 사잇값의 절댓값을 구해서, 그 합이 최댓값이 되는 값을 구한다.
+
+```c++
+int main(int argc, const char * argv[]) {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int n, temp, max=-1, differ=0;
+    vector<int> v;
+    
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        cin >> temp;
+        v.push_back(temp);
+    }
+    sort(v.begin(), v.end());
+    
+    do{
+        differ = 0;
+        
+        for(int i=1; i<n; i++)
+            differ += abs(v[i-1]-v[i]);
+        
+        
+        if(differ > max)
+            max = differ;
+        
+    }while(next_permutation(v.begin(), v.end()));
+    
+    cout << max << "\n";
+    
+    return 0;
+}
+```
+
+
 

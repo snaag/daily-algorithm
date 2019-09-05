@@ -106,6 +106,70 @@
 
 
 
+### 비트마스크
+
+* 문제: [집합 11723](<https://www.acmicpc.net/problem/11723>)
+* 문제는 순열에비해 간단하다고 생각한다. add, remove, toggle, check, all, empty 연산을 비트 연산자(& | ^ ~ >> <<)를 이용하여 계산하는 것이다.
+* 연산
+  * add: S|(1<<k)
+  * remove: S&~(1<<k)
+  * toggle: S^(1<<k)
+  * check: S&(1<<k)
+  * all: (1<<21)-1
+  * empty: 0
+
+```c++
+int main() {
+    // 속도 빠르게
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    string op; // 연산의 이름 - all empty add remove toggle check
+    
+    int n;
+    cin >> n;
+    int S = 0;
+    int k;
+    
+    for(int i=0; i<n; i++) {
+        cin >> op;
+        // all empty
+        // add remove toggle check
+        if(op == "all") {
+            S = (1<<21)-1;
+        } else if(op=="empty") {
+            S = 0;
+        } else if(op=="add") {
+            cin >> k;
+            S = S | (1<<k);
+        } else if(op=="remove") {
+            cin >> k;
+            S = S & ~(1<<k);
+        } else if(op=="toggle") {
+            cin >> k;
+            S = S ^ (1<<k);
+        } else if(op=="check") {
+            cin >> k;
+            if((S&(1<<k)) == 0) cout << 0 << "\n";
+            else cout << 1 << "\n";
+        }
+    }
+}
+```
+
+#### 특이사항
+
+* 단순 입력, 출력인데 시간초과가떠서 해당 부분을 찾아보니, `cin/cout` 보다 `scanf/printf`가 훨씬 빠르다고 한다. 그래서 이 속도의 간극을 보정해주기 위해서는 아래 코드를 써주어야 한다.
+
+  ```c++
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
+  ```
+
+
+
 ### 알게된 것
 
 * `resize(n)` 함수는 vector의 값을 그대로 보존하되, 사이즈만 n으로 바꾸어주는 함수이다.

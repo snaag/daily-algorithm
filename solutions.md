@@ -306,3 +306,86 @@ int main() {
 
 ```
 
+
+
+### 재귀 호출, 비트마스크
+
+#### [1, 2, 3 더하기 9095](https://www.acmicpc.net/problem/9095)
+
+* 규칙만 파악하면 풀 수 있는 간단한 문제였다. 규칙은 1일 때 1, 2일 때 2, 3일 때 4, 4일 때 7로, 즉 i번째의 수는 i-3 + i-2 + i-1일 때의 값의 합과 같다는 것이다. 
+
+* 나는 미리 최댓값까지 다 만들어놓고, 필요할 때 idx로 접근하여 가져가는 형태(dp)와 재귀, 두 가지 방법으로 풀었다.
+
+* Dp
+
+  * array를 써서 푸는 것이 일반적이지만 나는 vector를 별로 안써봐서, vector와 익숙해지려고 vector로 풀었다.
+
+  ```c++
+  v[0] = 0; v[1] = 1;
+  v[2] = 2; v[3] = 4;
+  for(int i=4; i<MAX; i++) {
+  	v[i] = v[i-3]+v[i-2]+v[i-1];
+  }
+  ```
+
+* 재귀
+
+  ```c++
+  int getVal(int n){
+      if (n==1) return 1;
+      if (n==2) return 2;
+      if (n==3) return 4;
+      return getVal(n-1)+getVal(n-2)+getVal(n-3);
+  }
+  ```
+
+* 전체 코드
+
+```c++
+// Dp
+#include <iostream>
+#include <vector>
+
+#define MAX 12
+
+using namespace std;
+
+int main() {
+    vector<int> v(MAX, 0);
+
+    v[0] = 0; v[1] = 1;
+    v[2] = 2; v[3] = 4;
+    for(int i=4; i<MAX; i++) {
+        v[i] = v[i-3]+v[i-2]+v[i-1];
+    }
+
+    int cnt, temp;
+    scanf("%d", &cnt);
+
+    for(int i=0; i<cnt; i++) {
+        scanf("%d", &temp);
+        printf("%d\n", v[temp]);
+    }
+}
+
+// 재귀
+int main() {
+    int getVal(int n);
+    
+    int cnt, temp;
+    scanf("%d", &cnt);
+    
+    for(int i=0; i<cnt; i++) {
+        scanf("%d", &temp);
+        printf("%d\n", getVal(temp));
+    }
+}
+
+int getVal(int n){
+    if (n==1) return 1;
+    if (n==2) return 2;
+    if (n==3) return 4;
+    return getVal(n-1)+getVal(n-2)+getVal(n-3);
+}
+```
+

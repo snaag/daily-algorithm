@@ -1,7 +1,7 @@
 # Solutions
 ## Ch2 완전 탐색 0
 ### 순열
-* 문제: [순열의 순서 1722](<https://www.acmicpc.net/problem/1722>)
+#### [순열의 순서 1722](https://www.acmicpc.net/problem/1722)
 
 * 문제는 두 가지로 나누어져있다. index를 입력받으면, 해당 위치의 순열을 출력하는 문제와, 임의의 순열을 입력받으면 그 순열이 몇 번째에 위치해있는지 알아내는 두 문제로 이루어져있다.
 
@@ -108,7 +108,8 @@
 
 ### 비트마스크
 
-* 문제: [집합 11723](<https://www.acmicpc.net/problem/11723>)
+#### [집합 11723](https://www.acmicpc.net/problem/11723)
+
 * 문제는 순열에비해 간단하다고 생각한다. add, remove, toggle, check, all, empty 연산을 비트 연산자(& | ^ ~ >> <<)를 이용하여 계산하는 것이다.
 * 연산
   * add: S|(1<<k)
@@ -180,7 +181,8 @@ int main() {
 
 ### 순열 사용하기
 
-* 문제: [차이를 최대로 10819](https://www.acmicpc.net/problem/10819)
+#### [차이를 최대로 10819]((https://www.acmicpc.net/problem/10819))
+
 * 굉장히 간단한 문제이다. 입력받은 수를 오름차순으로 한번 정렬해준 후, 계속해서 순열을 구한다. 그리고 매 순열을 구할 때 마다 사잇값의 절댓값을 구해서, 그 합이 최댓값이 되는 값을 구한다.
 
 ```c++
@@ -218,4 +220,89 @@ int main(int argc, const char * argv[]) {
 ```
 
 
+
+#### [로또 6603](https://www.acmicpc.net/problem/6603)
+
+* [참고 - 상세한 설명과 예시가 있는 좋은 글이다](https://lmcoa15.tistory.com/31)
+
+* 생각이 조금 필요했던 문제였다. 나는 위의 블로그를 참고하여 풀었다. 여기서 우리는 무조건 6개의 숫자만을 돌아가면서 출력을 해야하는데, 그 때 어떤걸 고르느냐를 **보조순열**이 결정하였다. 예를 들어 입력받은 값이 (갯수 제외) *1 2 3 4 5 6 7* 이라하면, 우리가 출력해야 하는 값은
+
+  *  *1 2 3 4 5 6*
+
+     *1 2 3 4 5 7*
+
+     *1 2 3 4 6 7*
+
+     *1 2 3 5 6 7*
+
+     *1 2 4 5 6 7*
+
+     *1 3 4 5 6 7*
+
+     *2 3 4 5 6 7*
+
+  이렇게 된다. 즉 처음에는 7이 빠지고, 두 번째에는 6이, 그 다음에는 5가 ... 마지막에는 1이 빠지며 끝난다.
+
+* 어떤 수를 빼고, 어떤 수들을 출력할지 어떻게 결정할까? **보조순열**이다. 보조 순열은, 어떤 값을 출력하고 어떤 값을 출력하지 않을 지 결정하는데 도와주는 순열이다. (사실은 조합이다) *0, 0, 0, 0, 0, 0, 1* 의 형태로 되어있으며 1의 위치를 바꾸면서, 0일때만 출력하게 한다. 
+
+```c++
+do{
+ 
+     for(int i=0; i<cnt; i++) {
+         if(subV[i] == 0)
+            printf("%d ", v[i]); // subV[i]가 0이면 출력한다
+     }
+
+     printf("\n");
+ 
+}while(next_permutation(subV.begin(), subV.end()));
+ 
+```
+
+* 바로 이 부분을 말한다. subV의 순열을 구하면서, 0인 부분만 출력하도록 한다.
+* 아래는 전체 코드이다
+
+```c++
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+#define FIXED_SIZE 6
+
+using namespace std;
+
+int main() {
+    
+    int cnt=1;
+    while(cnt != 0) {
+        scanf("%d", &cnt);
+        
+        vector<int> subV(cnt, 0); // 크기와 값을 미리 정해줄 수 있다
+        vector<int> v(cnt, 0);
+        
+        for(int i=0; i<cnt; i++) // 입력 받은 값을 바로 넣어주었다
+            scanf("%d", &v[i]);
+        
+        
+        // 보조순열 만들기
+        for(int i=FIXED_SIZE; i<cnt; i++)  // 6~전체 갯수 까지, 1로 바꿔주었다
+            subV[i] = 1;
+       
+        
+        do{
+            
+            for(int i=0; i<cnt; i++) { // 보조순열을 구했다
+                if(subV[i] == 0)
+                    printf("%d ", v[i]);
+            }
+            
+            printf("\n");
+            
+        }while(next_permutation(subV.begin(), subV.end()));
+        
+        printf("\n");
+    }
+}
+
+```
 

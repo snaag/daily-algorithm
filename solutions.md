@@ -511,3 +511,76 @@ int main() {
 }
 ```
 
+
+
+#### [N-Queen 9663](https://www.acmicpc.net/problem/9663)
+
+* 학교에서 수업을 들을 때에도 못 풀었던 문제였고, 문제를 봤을 때도 감이 오지 않아 많이 찾아보았다. 그 중 가장 도움이 되었던 글은 [이 글이다](https://debuglog.tistory.com/82). 그래서 이 분의 코드와 거의 같다. (베끼진 않았다)
+
+* 먼저 문제를 풀기 위해서는 `N X N` 에서 `N` 개의 퀸을 놓는 방법은 무엇이 있는지 생각을 해봐야 한다.
+
+  1. `N X N`크기의 체스판에서 `N`개의 퀸을 놓으려면, 한 줄에 한 개의 퀸이 있어야 한다.
+
+  2. 퀸을 임의의 자리`(r, c)`에 놓았다면, 그 자리를 기준으로 모든 c, 모든 오른쪽/왼쪽 대각선으로는 퀸을 놓을 수 없다. 따라서, 우리는 세 개의 1차원 배열을 생각할 수 있다. `col(column)`, `inc(increase)`, `dec(decrease)`가 그것이다.
+
+     * 예를 들어, 내가 {r:0, c:4} 자리에 퀸을 놓았다고 가정한다. 그렇다면 모든 **{r:?, c:4}** 에는 어떠한 퀸도 올 수 없다. 이 것을 `col`이 기록한다.
+
+     * 다음으로 `inc` 이다. 오른쪽 아래로 증가하는 대각선을 의미하는데, 이들은 **r-c**의 값이 동일하다는 특징을 갖고 있다. 따라서 r-c가 -4가 되는 모든 자리에는 어떠한 퀸도 올 수 없다. (배열에서 음수 인덱스는 존재할 수 없으므로 `+n` 을 해준다)
+     * 마지막으로 `dec` 이다. 왼쪽 아래로 감소하는 대각선을 의미하는데, 이들은 **r+c**의 값이 동일하다는 특징을 갖고 있다. 따라서 r+c가 4가 되는 모든 자리에는 어떠한 퀸도 올 수 없다.
+
+* 이 규칙을 생각하면, 문제를 조금 쉽게 접근할 수 있다.
+
+```c++
+if(!col[c] && !inc[r-c+n] && !dec[r+c]) {
+  col[c] = true;
+  inc[r-c+n] = true;
+  dec[r+c] = true;
+
+  solve(r+1);
+
+  col[c] = false;
+  inc[r-c+n] = false;
+  dec[r+c] = false;
+}
+```
+
+* 전체 코드
+
+```c++
+#include <iostream>
+
+int n, answer=0;
+
+bool col[16]; // column (직선 |)
+bool inc[31]; // increase (오른쪽 아래 대각선 \)
+bool dec[31]; // decrease (왼쪽 아래 대각선 /)
+
+void solve(int r) {
+    if(r >= n){
+        answer = answer + 1;
+        return;
+    }
+
+    for(int c=0; c<n; c++) {
+        if(!col[c] && !inc[r-c+n] && !dec[r+c]) {
+            col[c] = true;
+            inc[r-c+n] = true;
+            dec[r+c] = true;
+
+            solve(r+1);
+
+            col[c] = false;
+            inc[r-c+n] = false;
+            dec[r+c] = false;
+        }
+    }
+
+}
+
+int main() {
+    scanf("%d", &n);
+    solve(0);
+    printf("%d", answer);
+}
+```
+

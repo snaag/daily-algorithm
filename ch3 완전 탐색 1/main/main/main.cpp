@@ -187,78 +187,78 @@
 
 
 // 1759 암호 만들기
-#include <algorithm>
-#include <vector>
-#include <iostream>
-
-using namespace std;
-
-//4 6
-//a t c i s w
-
-int main() {
-    bool desc(int a, int b);
-
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    int l, c; // l < c
-    cin >> l;
-    cin >> c;
-
-    vector<bool> subV(c, 0);
-    vector<char> keys(c);
-    
-    vector<bool> isVowel(c, 0); // 모음 - 0으로 초기화
-    vector<bool> isConsonant(c, 1); // 자음 - 1로 초기화
-    
-    for(int i=0; i<c; i++) {
-        cin >> keys[i];
-        
-        if(i >= l)
-            subV[i] = 1;
-    }
-    
-    
-    sort(subV.begin(), subV.end()); // 보조 순열
-    sort(keys.begin(), keys.end()); // 문자
-    
-    for(int i=0; i<c; i++) {
-        if(keys[i] == 'a' || keys[i] == 'e' || keys[i] == 'i' || keys[i] == 'o' || keys[i] == 'u'){
-            isVowel[i] = 1; // 앞서 isVowel은 0으로 초기화 했으니, 모음을 만나면 1로 바꾸어준다
-            isConsonant[i] = 0; // 앞서 isConsonant는 1로 초기화했으니, 모음을 만나면 0으로 바꾸어준다
-        }
-    }
- 
-    
-    int cntJa, cntMo;
-    do {
-        cntJa = 0;
-        cntMo = 0;
-
-        for(int i=0; i<c; i++){
-            if(subV[i] == 0) { // 출력 가능한 문자 중에서,
-                cntJa += isConsonant[i]; // 자음의 갯수를 카운트한다
-                cntMo += isVowel[i]; // 모음의 갯수를 카운트 한다
-            }
-        }
-
-        if(cntMo >= 1 && cntJa >= 2) { // 각각 갯수가 1개, 2개 이상일 때만 출력이 가능하다
-            for(int i=0; i<c; i++){
-                if(subV[i] == 0)
-                    cout << keys[i];
-            }
-            cout << "\n";
-        }
-        
-    }while(next_permutation(subV.begin(), subV.end()));
-    
-    subV.clear(); // 초기화 해준다
-    keys.clear();
-    isVowel.clear();
-    isConsonant.clear();
-}
+//#include <algorithm>
+//#include <vector>
+//#include <iostream>
+//
+//using namespace std;
+//
+////4 6
+////a t c i s w
+//
+//int main() {
+//    bool desc(int a, int b);
+//
+//    ios::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    int l, c; // l < c
+//    cin >> l;
+//    cin >> c;
+//
+//    vector<bool> subV(c, 0);
+//    vector<char> keys(c);
+//
+//    vector<bool> isVowel(c, 0); // 모음 - 0으로 초기화
+//    vector<bool> isConsonant(c, 1); // 자음 - 1로 초기화
+//
+//    for(int i=0; i<c; i++) {
+//        cin >> keys[i];
+//
+//        if(i >= l)
+//            subV[i] = 1;
+//    }
+//
+//
+//    sort(subV.begin(), subV.end()); // 보조 순열
+//    sort(keys.begin(), keys.end()); // 문자
+//
+//    for(int i=0; i<c; i++) {
+//        if(keys[i] == 'a' || keys[i] == 'e' || keys[i] == 'i' || keys[i] == 'o' || keys[i] == 'u'){
+//            isVowel[i] = 1; // 앞서 isVowel은 0으로 초기화 했으니, 모음을 만나면 1로 바꾸어준다
+//            isConsonant[i] = 0; // 앞서 isConsonant는 1로 초기화했으니, 모음을 만나면 0으로 바꾸어준다
+//        }
+//    }
+//
+//
+//    int cntJa, cntMo;
+//    do {
+//        cntJa = 0;
+//        cntMo = 0;
+//
+//        for(int i=0; i<c; i++){
+//            if(subV[i] == 0) { // 출력 가능한 문자 중에서,
+//                cntJa += isConsonant[i]; // 자음의 갯수를 카운트한다
+//                cntMo += isVowel[i]; // 모음의 갯수를 카운트 한다
+//            }
+//        }
+//
+//        if(cntMo >= 1 && cntJa >= 2) { // 각각 갯수가 1개, 2개 이상일 때만 출력이 가능하다
+//            for(int i=0; i<c; i++){
+//                if(subV[i] == 0)
+//                    cout << keys[i];
+//            }
+//            cout << "\n";
+//        }
+//
+//    }while(next_permutation(subV.begin(), subV.end()));
+//
+//    subV.clear(); // 초기화 해준다
+//    keys.clear();
+//    isVowel.clear();
+//    isConsonant.clear();
+//}
 
 /*
  순열이 제대로 나오지 않아, 왜그런지 찾아봤더니 정렬이 필요하였다. 그래서 sort(subV.begin(), subV.end())를 해주었더니 잘 나왔지만, 내가 원하는 결과대로 나오지 않는 것이 문제였다. 나는 입력값이 l: 4, c: 6, keys: a t c i s w 일 때,
@@ -293,3 +293,93 @@ int main() {
 /*
  자음 갯수와 모음 갯수를 충족시키는 값을 구하기 위해, isVowel, isConsonant 라는 두개의 vector를 사용하였다. 각각은 모음, 자음일 때 1을 그 외네는 0을 갖는 자료구조이다. 따라서 어떤 문자를 보려고 할 때, 각각의 idx에 해당하는 isVowel, isConsonant의 합들이 각각 조건(1, 2)과 갖거나 큰 값이라면 조건을 충족하게 된다. 따라서 각각의 합이 1, 2와 갖거나 크면 출력을 하도록 하였다.
  */
+
+
+// 9663 N-Queen
+#include <iostream>
+
+int n, answer=0;
+
+bool col[16]; // column (직선 |)
+bool inc[31]; // increase (오른쪽 아래 대각선 \)
+bool dec[31]; // decrease (왼쪽 아래 대각선 /)
+
+void solve(int r) {
+    if(r >= n){
+        answer = answer + 1;
+        return;
+    }
+
+    for(int c=0; c<n; c++) {
+        if(!col[c] && !inc[r-c+n] && !dec[r+c]) {
+            col[c] = true;
+            inc[r-c+n] = true;
+            dec[r+c] = true;
+
+            solve(r+1);
+
+            col[c] = false;
+            inc[r-c+n] = false;
+            dec[r+c] = false;
+        }
+    }
+
+}
+
+int main() {
+    scanf("%d", &n);
+    solve(0);
+    printf("%d", answer);
+}
+/*
+학교에서 수업을 들을 때에도 못 풀었던 문제였고, 문제를 봤을 때도 감이 오지 않아 많이 찾아보았다. 그 중 가장 도움이 되었던 글은 https://debuglog.tistory.com/82. 그래서 이 분의 코드와 거의 같다. (베끼진 않았다)
+ 먼저 문제를 풀기 위해서는 NXN 에서 N 개의 퀸을 놓는 방법은 무엇이 있는지 생각을 해봐야 한다.
+ 1. NXN크기의 체스판에서 N개의 퀸을 놓으려면, 한 줄에 한 개의 퀸이 있어야 한다.
+ 2. 퀸을 임의의 자리(r, c)에 놓았다면, 그 자리를 기준으로 모든 c, 모든 오른쪽/왼쪽 대각선으로는 퀸을 놓을 수 없다.
+    - 따라서, 우리는 세 개의 1차원 배열을 생각할 수 있다. col(column), inc(increase), dec(decrease)가 그것이다.
+ - 예를 들어, 내가 {r:0, c:4} 자리에 퀸을 놓았다고 가정한다. 그렇다면 모든 {r:?, c:4} 에는 어떠한 퀸도 올 수 없다.
+ - 다음으로 inc 이다. 오른쪽 아래로 증가하는 대각선을 의미하는데, 이들은 r-c의 값이 동일하다는 특징을 갖고 있다. 따라서 r-c가 -4가 되는 모든 자리에는 어떠한 퀸도 올 수 없다.
+ - 마지막으로 dec 이다. 왼쪽 아래로 감소하는 대각선을 의미하는데, 이들은 r+c의 값이 동일하다는 특징을 갖고 있다. 따라서 r+c가 4가 되는 모든 자리에는 어떠한 퀸도 올 수 없다.
+ 이 규칙을 생각하면, 문제를 조금 쉽게 접근할 수 있다.
+ */
+
+// 킹갓해웅맨의 n-queen algorithm
+//#include <stdio.h>
+//#include <vector>
+//#include <math.h>
+//using namespace std;
+//
+//int n;
+//
+////step -> low // value -> col
+//vector<int> getCandidate(int step, int cur[16]) {
+//    vector<int> candy;
+//    for (int j = 0; j < n; j++) { // j is candi coloum
+//        int check = true;
+//        for (int i = 0; i < step; i++) {
+//            if (cur[i] == j || abs(cur[i] - j) == abs(i - step)) {
+//                check = false;
+//                break;
+//            }
+//        }
+//        if (check) candy.push_back(j);
+//    }
+//    return candy;
+//}
+//int backgtraking(int step, int cur[16]) {
+//    if (step == n) {
+//        return 1;
+//    }
+//    int sum = 0;
+//    vector<int> candi = getCandidate(step, cur);
+//    for (int idx : candi) {
+//        cur[step] = idx;
+//        sum += backgtraking(step + 1, cur);
+//    }
+//    return sum;
+//}
+//int main() {
+//    int cur[16];
+//    scanf("%d", &n);
+//    printf("%d", backgtraking(0, cur));
+//}

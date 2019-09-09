@@ -389,3 +389,125 @@ int getVal(int n){
 }
 ```
 
+
+
+#### [암호 만들기 1759](https://www.acmicpc.net/problem/1759)
+
+* 로또(6603)문제와 유사한 문제이다. 보조 순열을 구하고, 가능한 값을 거기서 추려서 출력하는 것이 메인 아이디어이다. 입력이 아래와 같을 때,
+
+   *4 6*
+
+   *a t c i s w*
+
+  
+
+*  *0 0 0 0 1 1*
+
+   *0 0 0 1 0 1*
+
+   *...*
+
+* 을 반복하며, 0일 때, 그리고 자음이 2개 이상, 모음이 1개 이상일 때 출력하도록 하면 된다. 그런데 `1 1 1 1 0 0` 이 아니라, `0 0 0 0 1 1` 로 (**0일 때 출력하도록**)한 이유는, **다음 순열을 구하는 문제** 때문이었다. 
+* **순열이 제대로 나오지 않는 경우**에는 다음과 같은 이유가 있다.
+  1. **정렬이 제대로 되어있지 않은 경우**, 이 경우에는, 정렬만 다시 해주면 된다. `sort(subV.begin(), subV.end());` 
+  2. **내림 차순으로 정렬이 되어있어, 다음 순열이 없다고 판단되는 경우**
+     * c++에서 next_permutation으로 다음 순열을 구하는 방법은, 전체 수열에서 내림차순(감소)을 보여주는 sequence를 찾아, 그 sequence를 다시 오름차순으로 바꿔주는 방식을 반복해서 찾는다. **하지만 순열이 내림차순으로 정렬이 되어있다면**, 다음 순열이 없다고 판단하게 되는 것이다. 따라서 처음에 생각한 `1 1 1 1 0 0` 으로 계속해서 다음 순열을 구하려고 할 경우, 이미 내림차순으로 정렬이 완료되어있기 때문에 **다음 순열이 없다고 판단**해버린것이다. 따라서 내 의도대로 나오게 하려면, 오름차순인 `0 0 0 0 1 1` 로 하면 된다. 이 때문에 `1 1 1 1 0 0` 이 아닌,  `0 0 0 0 1 1`를 사용하였고, `0`일 때 출력을 하도록 한 것이다.
+* **자음 갯수와 모음 갯수를 충족시키는 값을 구하기 위해**, `isVowel`, `isConsonant` 라는 두개의 vector를 사용하였다. 각각은 모음, 자음일 때 1을 그 외에는 0을 갖는 자료구조이다. 따라서 어떤 문자를 보려고 할 때, 각각의 idx에 해당하는 `isVowel`,` isConsonant`의 합들이 각각 조건(1, 2)과 갖거나 큰 값이라면 조건을 충족하게 된다. 따라서 각각의 합이 1, 2와 갖거나 크면 출력을 하도록 하였다. 아래 코드가 이 부분을 말한다.
+
+```c++
+do {
+        cntJa = 0;
+        cntMo = 0;
+
+        for(int i=0; i<c; i++){
+            if(subV[i] == 0) { // 출력 가능한 문자 중에서,
+                cntJa += isConsonant[i]; // 자음의 갯수를 카운트한다
+                cntMo += isVowel[i]; // 모음의 갯수를 카운트 한다
+            }
+        }
+
+        if(cntMo >= 1 && cntJa >= 2) { // 각각 갯수가 1개, 2개 이상일 때만 출력이 가능하다
+            for(int i=0; i<c; i++){
+                if(subV[i] == 0)
+                    cout << keys[i];
+            }
+            cout << "\n";
+        }
+        
+    }while(next_permutation(subV.begin(), subV.end()));
+```
+
+* 전체 코드
+
+```c++
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    bool desc(int a, int b);
+
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int l, c; // l < c
+    cin >> l;
+    cin >> c;
+
+    vector<bool> subV(c, 0);
+    vector<char> keys(c);
+    
+    vector<bool> isVowel(c, 0); // 모음 - 0으로 초기화
+    vector<bool> isConsonant(c, 1); // 자음 - 1로 초기화
+    
+    for(int i=0; i<c; i++) {
+        cin >> keys[i];
+        
+        if(i >= l)
+            subV[i] = 1;
+    }
+    
+    
+    sort(subV.begin(), subV.end()); // 보조 순열
+    sort(keys.begin(), keys.end()); // 문자
+    
+    for(int i=0; i<c; i++) {
+        if(keys[i] == 'a' || keys[i] == 'e' || keys[i] == 'i' || keys[i] == 'o' || keys[i] == 'u'){
+            isVowel[i] = 1; // 앞서 isVowel은 0으로 초기화 했으니, 모음을 만나면 1로 바꾸어준다
+            isConsonant[i] = 0; // 앞서 isConsonant는 1로 초기화했으니, 모음을 만나면 0으로 바꾸어준다
+        }
+    }
+ 
+    
+    int cntJa, cntMo;
+    do {
+        cntJa = 0;
+        cntMo = 0;
+
+        for(int i=0; i<c; i++){
+            if(subV[i] == 0) { // 출력 가능한 문자 중에서,
+                cntJa += isConsonant[i]; // 자음의 갯수를 카운트한다
+                cntMo += isVowel[i]; // 모음의 갯수를 카운트 한다
+            }
+        }
+
+        if(cntMo >= 1 && cntJa >= 2) { // 각각 갯수가 1개, 2개 이상일 때만 출력이 가능하다
+            for(int i=0; i<c; i++){
+                if(subV[i] == 0)
+                    cout << keys[i];
+            }
+            cout << "\n";
+        }
+        
+    }while(next_permutation(subV.begin(), subV.end()));
+    
+    subV.clear(); // 초기화 해준다
+    keys.clear();
+    isVowel.clear();
+    isConsonant.clear();
+}
+```
+

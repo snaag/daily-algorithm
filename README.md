@@ -20,4 +20,5 @@
 * [note](./note.md)
 
 ## 푼 문제 정리
-* [solutions](./solutions.md)
+* [solutions - Ch2 완전 탐색 0](./solutions/ch2_완전_탐색_0.md)
+* [solutions - Ch3 완전 탐색 1](./solutions/ch3_완전_탐색_1.md)

@@ -584,3 +584,69 @@ int main() {
 }
 ```
 
+
+
+#### [스도쿠 2580](https://www.acmicpc.net/problem/2580)
+
+* 감을 잡는데 오래 걸렸던 문제이다. 참고했던 링크는 [여기1](https://debuglog.tistory.com/83) 랑 [여기2](https://yabmoons.tistory.com/88). 참고한 많은 자료들 중에서 가장 상세해서 많은 도움을 받았다.
+
+* 먼저 문제를 풀기 위해서, 우리가 스도쿠를 풀 때 어떻게 풀었는지를 생각해보면 된다. 보통 빈 칸을 채우려고 할 때 가로줄, 세로줄, 사각형을 보고 **없는 값**을 찾는다. 이 것을 각각 세개의 2차원 `array` 가 보관하고 있다. 
+
+  * ```c++
+    #define MAX 9
+    
+    bool garo[MAX][MAX+1]={false};
+    bool sero[MAX][MAX+1]={false};
+    bool square[MAX][MAX+1]={false};
+    int sudoku[MAX][MAX]={0};
+    ```
+
+  *  `garo[0][1]=true` 의 의미는 0번째 가로줄에는 1이 있다. `garo[0][2]=false` 의 의미는, 0번째 가로줄에는 2가 없다. 라는 의미이다. `sero` 와 `square` 모두 같은 의미이다. 이 때 `square` 의 경우 어떻게 나누어지냐면, 스도쿠에서 어떤 값을 채우려고 할 때 기준으로 보는 사각형을 말한다. 그리고 각 `square`의 index는 `3*(x/3)+(y/3)` 로 정해진다. (2번 링크에 그림이 있다). 각 내용은 입력과 동시에 초기화된다.
+
+  * 이 때 `sudoku` 와 달리  `garo` `sero` `square` 가 `[MAX][MAX+1]` 의 크기로 선언된 이유는, index는 `0~9` 이지만 들어가는 값은 `1~9` 이기 때문에 편의를 위해 뒤의 크기를 더 크게 선언하였다.
+
+    ```c++
+    for(int i=0; i<MAX; i++) {
+            for(int j=0; j<MAX; j++) {
+                cin >> sudoku[i][j];
+                garo[i][sudoku[i][j]] = true;
+                sero[j][sudoku[i][j]] = true;
+                square[(i/3)*3+(j/3)][sudoku[i][j]] = true;
+            }
+        }
+    ```
+
+* 메인 로직 부분이다. 백트래킹으로 했다. MAX(9) 값을 기준으로 행과 열(x, y) 값을 구할 수 있다는 점에서 착안하여 `int x = cnt/MAX` `int y = cnt%MAX` 로 하였다. 
+
+```c++
+solve(0); // (main에서 호출)
+
+
+void solve(int cnt) { // 함수 부분
+    int x = cnt/MAX;
+    int y = cnt%MAX;
+    
+    if(cnt >= 81){
+        printSudoku();
+        exit(0);
+    }
+    
+    if(sudoku[x][y] == 0) {
+        for(int i=1; i<MAX+1; i++) {
+            if(garo[x][i] == false && sero[y][i] == false && square[(x/3)*3+(y/3)][i] == false) {
+                sudoku[x][y] = i;
+                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = true;
+                
+                solve(cnt+1);
+                
+                sudoku[x][y] = 0;
+                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = false;
+            }
+        }
+    } else {
+        solve(cnt+1);
+    }
+}
+```
+
+* 그리고 `exit(0)` 을 하지 않으면 결과가 틀렸다고나온다. 이것 또한 링크2를 참고하였다.

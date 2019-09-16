@@ -296,41 +296,41 @@
 
 
 // 9663 N-Queen
-#include <iostream>
-
-int n, answer=0;
-
-bool col[16]; // column (직선 |)
-bool inc[31]; // increase (오른쪽 아래 대각선 \)
-bool dec[31]; // decrease (왼쪽 아래 대각선 /)
-
-void solve(int r) {
-    if(r >= n){
-        answer = answer + 1;
-        return;
-    }
-
-    for(int c=0; c<n; c++) {
-        if(!col[c] && !inc[r-c+n] && !dec[r+c]) {
-            col[c] = true;
-            inc[r-c+n] = true;
-            dec[r+c] = true;
-
-            solve(r+1);
-
-            col[c] = false;
-            inc[r-c+n] = false;
-            dec[r+c] = false;
-        }
-    }
-
-}
-
-int main() {
-    scanf("%d", &n);
-    solve(0);
-    printf("%d", answer);
-}
+//#include <iostream>
+//
+//int n, answer=0;
+//
+//bool col[16]; // column (직선 |)
+//bool inc[31]; // increase (오른쪽 아래 대각선 \)
+//bool dec[31]; // decrease (왼쪽 아래 대각선 /)
+//
+//void solve(int r) {
+//    if(r >= n){
+//        answer = answer + 1;
+//        return;
+//    }
+//
+//    for(int c=0; c<n; c++) {
+//        if(!col[c] && !inc[r-c+n] && !dec[r+c]) {
+//            col[c] = true;
+//            inc[r-c+n] = true;
+//            dec[r+c] = true;
+//
+//            solve(r+1);
+//
+//            col[c] = false;
+//            inc[r-c+n] = false;
+//            dec[r+c] = false;
+//        }
+//    }
+//
+//}
+//
+//int main() {
+//    scanf("%d", &n);
+//    solve(0);
+//    printf("%d", answer);
+//}
 /*
 학교에서 수업을 들을 때에도 못 풀었던 문제였고, 문제를 봤을 때도 감이 오지 않아 많이 찾아보았다. 그 중 가장 도움이 되었던 글은 https://debuglog.tistory.com/82. 그래서 이 분의 코드와 거의 같다. (베끼진 않았다)
  먼저 문제를 풀기 위해서는 NXN 에서 N 개의 퀸을 놓는 방법은 무엇이 있는지 생각을 해봐야 한다.
@@ -383,3 +383,72 @@ int main() {
 //    scanf("%d", &n);
 //    printf("%d", backgtraking(0, cur));
 //}
+
+
+#include <iostream>
+#define MAX 9
+
+using namespace std;
+
+bool garo[MAX][MAX+1]={false};
+bool sero[MAX][MAX+1]={false};
+bool square[MAX][MAX+1]={false};
+int sudoku[MAX][MAX]={0};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    void solve(int cnt);
+    void printSudoku();
+
+    for(int i=0; i<MAX; i++) {
+        for(int j=0; j<MAX; j++) {
+            cin >> sudoku[i][j];
+            garo[i][sudoku[i][j]] = true;
+            sero[j][sudoku[i][j]] = true;
+            square[(i/3)*3+(j/3)][sudoku[i][j]] = true;
+        }
+    }
+    
+    solve(0);
+}
+
+void printSudoku() {
+    for(int i=0; i<MAX; i++) {
+        for(int j=0; j<MAX; j++) {
+            cout << sudoku[i][j] << " ";
+        }
+        cout << "\n";
+        
+    }
+}
+
+void solve(int cnt) {
+    int x = cnt/MAX;
+    int y = cnt%MAX;
+    
+    if(cnt >= 81){
+        printSudoku();
+        exit(0);
+    }
+    
+    if(sudoku[x][y] == 0) {
+        for(int i=1; i<MAX+1; i++) {
+            if(garo[x][i] == false && sero[y][i] == false && square[(x/3)*3+(y/3)][i] == false) {
+                sudoku[x][y] = i;
+                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = true;
+                
+                solve(cnt+1);
+                
+                sudoku[x][y] = 0;
+                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = false;
+            }
+        }
+    } else {
+        solve(cnt+1);
+    }
+}
+
+

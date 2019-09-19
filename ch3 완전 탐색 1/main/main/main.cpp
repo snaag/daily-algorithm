@@ -384,71 +384,145 @@
 //    printf("%d", backgtraking(0, cur));
 //}
 
+//
+//#include <iostream>
+//#define MAX 9
+//
+//using namespace std;
+//
+//bool garo[MAX][MAX+1]={false};
+//bool sero[MAX][MAX+1]={false};
+//bool square[MAX][MAX+1]={false};
+//int sudoku[MAX][MAX]={0};
+//
+//int main() {
+//    ios::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    void solve(int cnt);
+//    void printSudoku();
+//
+//    for(int i=0; i<MAX; i++) {
+//        for(int j=0; j<MAX; j++) {
+//            cin >> sudoku[i][j];
+//            garo[i][sudoku[i][j]] = true;
+//            sero[j][sudoku[i][j]] = true;
+//            square[(i/3)*3+(j/3)][sudoku[i][j]] = true;
+//        }
+//    }
+//
+//    solve(0);
+//}
+//
+//void printSudoku() {
+//    for(int i=0; i<MAX; i++) {
+//        for(int j=0; j<MAX; j++) {
+//            cout << sudoku[i][j] << " ";
+//        }
+//        cout << "\n";
+//
+//    }
+//}
+//
+//void solve(int cnt) {
+//    int x = cnt/MAX;
+//    int y = cnt%MAX;
+//
+//    if(cnt >= 81){
+//        printSudoku();
+//        exit(0);
+//    }
+//
+//    if(sudoku[x][y] == 0) {
+//        for(int i=1; i<MAX+1; i++) {
+//            if(garo[x][i] == false && sero[y][i] == false && square[(x/3)*3+(y/3)][i] == false) {
+//                sudoku[x][y] = i;
+//                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = true;
+//
+//                solve(cnt+1);
+//
+//                sudoku[x][y] = 0;
+//                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = false;
+//            }
+//        }
+//    } else {
+//        solve(cnt+1);
+//    }
+//}
+//
+//
 
+// 1987 알파벳
+// bitmask를 사용해서 개선해보자
 #include <iostream>
-#define MAX 9
-
+#include <vector>
 using namespace std;
 
-bool garo[MAX][MAX+1]={false};
-bool sero[MAX][MAX+1]={false};
-bool square[MAX][MAX+1]={false};
-int sudoku[MAX][MAX]={0};
+char **pyo;
+//bool alp[26] = {false};
+vector<char> path, maxPath;
+int xCoor[4] = {-1, 0, 1, 0};
+int yCoor[4] = {0, 1, 0, -1};
+int r, c;
+
+int mask = 0;
+//
+//int main() {
+//    char a;
+//    cin >> a;
+//
+//    mask = mask | (1 << (a-65)); // set
+//
+//
+//
+//    mask ^= (1 << (a-65)); // un set
+//
+////    mask | (1<<)
+//}
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    void solve(int x, int y);
     
-    void solve(int cnt);
-    void printSudoku();
+    path.resize(0); // vector path를 초기화해준다
+    
+    cin >> r >> c; // r, c, 입력
+    
+    pyo = new char*[r]; // pyo 메모리 할당
+    for(int i=0; i<r; i++)
+        pyo[i] = new char[c];
+    
+    for(int i=0; i<r; i++) // pyo 값 입력
+        for(int j=0; j<c; j++)
+            cin >> pyo[i][j];
+    
+    solve(0, 0); // dfs
 
-    for(int i=0; i<MAX; i++) {
-        for(int j=0; j<MAX; j++) {
-            cin >> sudoku[i][j];
-            garo[i][sudoku[i][j]] = true;
-            sero[j][sudoku[i][j]] = true;
-            square[(i/3)*3+(j/3)][sudoku[i][j]] = true;
-        }
-    }
-    
-    solve(0);
+    cout << maxPath.size(); // 출력
 }
 
-void printSudoku() {
-    for(int i=0; i<MAX; i++) {
-        for(int j=0; j<MAX; j++) {
-            cout << sudoku[i][j] << " ";
-        }
-        cout << "\n";
+void solve(int x, int y) {
+    
+    path.push_back(pyo[x][y]);
+//    alp[+pyo[x][y]-65] = true;
+    mask = mask | (1 << (+pyo[x][y]-65));
+    
+    for(int i=0; i<4; i++){
+        int newX = x + xCoor[i];
+        int newY = y + yCoor[i];
+        if(newX < 0 || newY < 0 || newX > r-1 || newY > c-1) continue;
+
+//        if(alp[+pyo[newX][newY] -65]) continue;
+        if(mask & (1 << +pyo[newX][newY]-65)) continue;
+        
+        solve(newX, newY);
         
     }
-}
-
-void solve(int cnt) {
-    int x = cnt/MAX;
-    int y = cnt%MAX;
     
-    if(cnt >= 81){
-        printSudoku();
-        exit(0);
-    }
+    if(maxPath.size() < path.size())
+        maxPath = path;
     
-    if(sudoku[x][y] == 0) {
-        for(int i=1; i<MAX+1; i++) {
-            if(garo[x][i] == false && sero[y][i] == false && square[(x/3)*3+(y/3)][i] == false) {
-                sudoku[x][y] = i;
-                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = true;
-                
-                solve(cnt+1);
-                
-                sudoku[x][y] = 0;
-                garo[x][i] = sero[y][i] = square[(x/3)*3+(y/3)][i] = false;
-            }
-        }
-    } else {
-        solve(cnt+1);
-    }
+    path.pop_back();
+//    alp[+pyo[x][y]-65] = false;
+    mask ^= (1 << (+pyo[x][y]-65));
 }
-
-

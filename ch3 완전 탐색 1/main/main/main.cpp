@@ -455,74 +455,395 @@
 
 // 1987 알파벳
 // bitmask를 사용해서 개선해보자
-#include <iostream>
-#include <vector>
-using namespace std;
-
-char **pyo;
-//bool alp[26] = {false};
-vector<char> path, maxPath;
-int xCoor[4] = {-1, 0, 1, 0};
-int yCoor[4] = {0, 1, 0, -1};
-int r, c;
-
-int mask = 0;
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//
+//char **pyo;
+////bool alp[26] = {false};
+//vector<char> path, maxPath;
+//int xCoor[4] = {-1, 0, 1, 0};
+//int yCoor[4] = {0, 1, 0, -1};
+//int r, c;
+//
+//int mask = 0;
 //
 //int main() {
-//    char a;
-//    cin >> a;
+//    void solve(int x, int y);
 //
-//    mask = mask | (1 << (a-65)); // set
+//    path.resize(0); // vector path를 초기화해준다
 //
+//    cin >> r >> c; // r, c, 입력
 //
+//    pyo = new char*[r]; // pyo 메모리 할당
+//    for(int i=0; i<r; i++)
+//        pyo[i] = new char[c];
 //
-//    mask ^= (1 << (a-65)); // un set
+//    for(int i=0; i<r; i++) // pyo 값 입력
+//        for(int j=0; j<c; j++)
+//            cin >> pyo[i][j];
 //
-////    mask | (1<<)
+//    solve(0, 0); // dfs
+//
+//    cout << maxPath.size(); // 출력
 //}
+//
+//void solve(int x, int y) {
+//
+//    path.push_back(pyo[x][y]);
+////    alp[+pyo[x][y]-65] = true;
+//    mask = mask | (1 << (+pyo[x][y]-65));
+//
+//    for(int i=0; i<4; i++){
+//        int newX = x + xCoor[i];
+//        int newY = y + yCoor[i];
+//        if(newX < 0 || newY < 0 || newX > r-1 || newY > c-1) continue;
+//
+////        if(alp[+pyo[newX][newY] -65]) continue;
+//        if(mask & (1 << +pyo[newX][newY]-65)) continue;
+//
+//        solve(newX, newY);
+//
+//    }
+//
+//    if(maxPath.size() < path.size())
+//        maxPath = path;
+//
+//    path.pop_back();
+////    alp[+pyo[x][y]-65] = false;
+//    mask ^= (1 << (+pyo[x][y]-65));
+//}
+
+
+//// 2468 안전 영역
+//#include <iostream>
+//#include <vector>
+//#include <utility>
+//
+//using namespace std;
+//
+//int **pyo;
+//bool **isVisit;
+//int r, maxHeight = -1, minHeight = 101;
+//int xCoor[4] = {-1, 0, 1, 0};
+//int yCoor[4] = {0, 1, 0, -1};
+//
+//int main() {
+//    void solve(int x, int y, int height);
+//    void printPyo();
+//    void initialize();
+//
+//    cin >> r;
+//    pyo = new int*[r];
+//    isVisit = new bool*[r];
+//
+//    for(int i=0; i<r; i++){
+//        pyo[i] = new int[r];
+//        isVisit[i] = new bool[r];
+//    }
+//
+//    for(int i=0; i<r; i++)
+//        for(int j=0; j<r; j++){
+//            cin >> pyo[i][j];
+//            isVisit[i][j] = false;
+//
+//            if(pyo[i][j] > maxHeight)
+//                maxHeight = pyo[i][j];
+//
+//            if(pyo[i][j] < minHeight)
+//                minHeight = pyo[i][j];
+//        }
+//
+//
+//    int result = 1;
+//
+//    for(int height = minHeight; height<maxHeight; height++) {
+//        int ans = 0;
+//        initialize();
+//
+//        for(int i=0; i<r; i++)
+//            for(int j=0; j<r; j++)
+//                if(!isVisit[i][j] && pyo[i][j] > height) {
+//                    ans = ans + 1;
+//                    solve(i, j, height);
+//                }
+//
+//        result = max(ans, result);
+//    }
+//
+//    cout << result << "\n";
+//}
+//
+//void solve(int x, int y, int height) {
+//
+//    if(pyo[x][y] < height+1) return;
+//    if(isVisit[x][y]) return;
+//
+//    isVisit[x][y] = true;
+//
+//    for(int i=0; i<4; i++) {
+//        int newX = x + xCoor[i];
+//        int newY = y + yCoor[i];
+//
+//        if(newX < 0 || newY < 0 || newX > r-1 || newY > r-1) continue;
+//
+//        solve(newX, newY, height);
+//    }
+//
+//}
+//
+//
+//void initialize() {
+//    for(int i=0; i<r; i++) {
+//        for(int j=0; j<r; j++) {
+//            isVisit[i][j] = false;
+//        }
+//    }
+//}
+//
+///*
+// 영역의 갯수를 세는 것이다.
+// 그러면 영역의 갯수는 어떻게 세야할까?
+// 답은 하나의 점을 잡고, 거기서 가능한 모든 점을 방문한다. 그리고 백트래킹 문제에서 들린 후 들린 전과 같은 상태(isVisit true 를 isVisit false 로 바꿔주는)처리를 하지 않는다. 그렇게 하지 않는 이유는, 들렸던 곳은 절대 다시 들리지 않아야 하기 때문이다.
+// 하나의 점을 기준으로 잡고, 그 점에서 출발하여 가능한 모든 곳을 방문한다. (찾아보니 이렇게 하는 것을 flood fill 이라고 한다)
+// */
+//
+//void printPyo() {
+//    for(int i=0; i<r; i++) {
+//        for(int j=0; j<r; j++) {
+//            cout << pyo[i][j] << " ";
+//        }
+//        cout << "\n";
+//    }
+//}
+//
+
+// 11724 연결 요소의 갯수 - 1
+//#include <iostream>
+//#include <vector>
+//#define MAX 1001
+//using namespace std;
+//
+//
+//int pyo[MAX][MAX] = { 0 };
+//int isVisit[MAX][MAX] = { false };
+//int n, m, cnt=0;
+//
+//int main() {
+//    void solve(int x, int y);
+//
+//    ios::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> m;
+//
+//    // value
+//    int r, c;
+//    for(int j=0; j<m; j++) {
+//        cin >> r >> c;
+//        pyo[r][c] = 1;
+//        pyo[c][r] = 1;
+//    }
+//
+//    // 간선으로 구하기
+//    for(int i=1; i<n+1; i++) {
+//        for(int j=1; j<n+1; j++) {
+//            if(!isVisit[i][j] && pyo[i][j] == 1) {
+//                solve(i, j);
+//                cnt++;
+//            }
+//        }
+//    }
+//
+//    // 점이 하나만 있는 경우 구하기
+//    for(int i=1; i<n+1; i++) {
+//
+//        int j;
+//        for(j=1; j<n+1; j++) {
+//            if(pyo[i][j] == 1) break;
+//        }
+//
+//        if(j == n+1)
+//            cnt++;
+//    }
+//
+//    cout << cnt << endl;
+//
+//}
+//
+//void solve(int x, int y) {
+//    if(isVisit[x][y]) return;
+//    if(pyo[x][y] == 0) return;
+//
+//    isVisit[x][y] = true;
+////    isVisit[y][x] = true;
+////    첫 번째 행에 점이 두개 이상인 경우, 제대로 찾지 못한다.
+////    그리고 설사 이 줄(680)을 지운다고 하여도, 왔던 간선을 다시 보기 때문에 성능이 좋지 않다. -해웅
+//
+//    for(int i=1; i<n+1; i++)
+//        if(!isVisit[y][i] && pyo[y][i] == 1)
+//            solve(y, i);
+//
+//}
+//
+//void printPyo() {
+//    for(int i=1; i<n+1; i++) {
+//        for(int j=1; j<n+1; j++) {
+//            cout << pyo[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
+//}
+
+// 11724 연결 요소의 갯수 - 2
+//#include <iostream>
+//#include <vector>
+//#define MAX 1001
+//using namespace std;
+//
+//vector<int> graph[MAX];
+//bool isVisit[MAX];
+//
+//int n, m, cnt=0;
+//// n: 정점의 갯수
+//// m: 간선의 갯수
+//
+//int main() {
+//    void solve(int idx);
+//
+//    ios::sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> m;
+//
+//    // 입력
+//    int r, c, size=max(m+1, n+1);
+//    for(int i=1; i<size; i++) {
+//        if(i<m+1) {
+//            cin >> r >> c;
+//            graph[r].push_back(c);
+//            graph[c].push_back(r);
+//        }
+//        if(i<n+1)
+//            isVisit[i] = false;
+//    }
+//
+//    // dfs
+//    for(int i=1; i<n+1; i++){
+//        if(!isVisit[i]) {
+//            cnt++;
+//            solve(i);
+//        }
+//    }
+//
+//    cout << cnt;
+//}
+//
+//void solve(int idx) {
+//    if(isVisit[idx]) return;
+//
+//    isVisit[idx] = true;
+//    for(int i=0; i<graph[idx].size(); i++) {
+//        solve(graph[idx][i]);
+//    }
+//}
+//
+//
+//void printInfo() {
+////    graph
+//    for(int i=1; i<n+1; i++) {
+//        cout << i << ": ";
+//        for(int j=0; j<graph[i].size(); j++) {
+//            cout << graph[i][j] << " ";
+//        }
+//        cout << endl;
+//    }
+////    isVisit
+//    for(int i=1; i<n+1; i++) {
+//        cout << isVisit[i] << endl;
+//    }
+//}
+/*
+ 그래프는 점으로 구성이 되어있으니까 (간선 보다는) 점으로 접근하는 것이 좋다. 1번이 간선으로 접근한 것이고, 2번이 점으로 접근한 것이다.
+ */
+
+// 2667 단지번호붙이기
+// 11724번과 유사하다고 한다.
+/*
+7
+ 0 1 1 0 1 0 0
+ 0 1 1 0 1 0 1
+ 1 1 1 0 1 0 1
+ 0 0 0 0 1 1 1
+ 0 1 0 0 0 0 0
+ 0 1 1 1 1 1 0
+ 0 1 1 1 0 0 0
+ */
+#include <iostream>
+#define MAX 26
+
+int pyo[MAX][MAX];
+bool isVisit[MAX][MAX];
+int n, cnt=0, size=0;
+int xCoor[4] = {-1, 0, 1, 0};
+int yCoor[4] = {0, 1, 0, -1};
+
+using namespace std;
 
 int main() {
     void solve(int x, int y);
-    
-    path.resize(0); // vector path를 초기화해준다
-    
-    cin >> r >> c; // r, c, 입력
-    
-    pyo = new char*[r]; // pyo 메모리 할당
-    for(int i=0; i<r; i++)
-        pyo[i] = new char[c];
-    
-    for(int i=0; i<r; i++) // pyo 값 입력
-        for(int j=0; j<c; j++)
-            cin >> pyo[i][j];
-    
-    solve(0, 0); // dfs
+    void printPyo();
 
-    cout << maxPath.size(); // 출력
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    
+    // 입력
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            cin >> pyo[i][j];
+        }
+    }
+    
+//    printPyo();
+    
+    // dfs
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            if(!isVisit[i][j] && pyo[i][j] == 1) {
+                cnt++;
+                solve(i, j);
+            }
+        }
+    }
+    
+    cout << cnt;
+}
+
+void printPyo() {
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<n; j++) {
+            cout << pyo[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
 
 void solve(int x, int y) {
+    if(isVisit[x][y] || pyo[x][y] == 0) return;
     
-    path.push_back(pyo[x][y]);
-//    alp[+pyo[x][y]-65] = true;
-    mask = mask | (1 << (+pyo[x][y]-65));
-    
-    for(int i=0; i<4; i++){
-        int newX = x + xCoor[i];
-        int newY = y + yCoor[i];
-        if(newX < 0 || newY < 0 || newX > r-1 || newY > c-1) continue;
-
-//        if(alp[+pyo[newX][newY] -65]) continue;
-        if(mask & (1 << +pyo[newX][newY]-65)) continue;
+    int newX, newY;
+    for(int i=0; i<4; i++) {
+        newX = x + xCoor[i];
+        newY = y + yCoor[i];
+        
+        if(newX < 0 || newY < 0 || newX > n-1 || newY > n-1) continue;
+        if(isVisit[newX][newY] || pyo[newX][newY] == 0) continue;
         
         solve(newX, newY);
-        
     }
-    
-    if(maxPath.size() < path.size())
-        maxPath = path;
-    
-    path.pop_back();
-//    alp[+pyo[x][y]-65] = false;
-    mask ^= (1 << (+pyo[x][y]-65));
 }

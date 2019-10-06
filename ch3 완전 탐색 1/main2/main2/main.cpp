@@ -344,33 +344,65 @@
 
 
 // 1697 숨바꼭질
-#include <iostream>
+//#include <iostream>
+//#include <queue>
+//
+//#define MAX 100001
+//
+//using namespace std;
+//
+//int (*operation[3])(int) = {
+//    [](int a){return a-1;},
+//    [](int a){return a+1;},
+//    [](int a){return a*2;}
+//};
+//int n, k, t=0; // n: 수빈, k: 동생, t: 시간(초)
+//bool visited[MAX] = {false,};
+//queue<int> q;
+//
+//int main() {
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    void bfs(int idx);
+//
+//    // n, k 초기화 하기
+//    cin >> n >> k;
+//
+//    // q에 초기값 넣어주기
+//    visited[n] = true;
+//    q.push(n);
+//
+//    // bfs
+//    bfs(n);
+//}
+//
+//void bfs(int idx) {
+//
+//    while(!q.empty()) {
+//        int size = q.size();
+//        for(int i=0; i<size; i++) {
+//            int f = q.front();
+//            q.pop();
+//            if(f == k) {
+//                cout << t;
+//                exit(0);
+//            }
+//
+//            for(int j=0; j<3; j++) {
+//                int newN = operation[j](f);
+//                if(newN < 0 || newN > MAX || visited[newN]) continue;
+//
+//                q.push(newN);
+//                visited[newN] = true;
+//            }
+//
+//        }
+//        t++;
+//    }
+//}
 
-using namespace std;
-
-int main() {
-    ios_base :: sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    auto f1 = []() { cout << "foo" << endl; };
-    f1();
-    
-    auto f2 = [](int a) {return a*2;};
-    int a = f2(3);
-    cout << a << endl;
-    
-    int (*operation[3])(int) = {
-        [](int a) -> int {return a-1;},
-        [](int a){return a+1;},
-        [](int a){return a*2;}
-    };
-
-    cout << operation[0](3) << endl;
-//    auto z = std::array<int, 5>();
-    
-    
-}
 /*
  lambda 식을 array 안에 담는 방법: 함수 포인터 array를 사용하면 된다.
  * 일부 자료를 찾아봤을 때, `auto f1 = [](int a){return a+1;};` 이런 식으로 되어있길래, 처음에는 그저 auto 라는 type이 있는 줄 알고,
@@ -386,5 +418,330 @@ int main() {
  
  cout << operation[0](3) << endl;
  ```
- 
  */
+
+// 12851 숨바꼭질 2
+//#include <iostream>
+//#include <queue>
+//
+//#define MAX 100001
+//
+//using namespace std;
+//
+//int (*operation[3])(int) = {
+//    [](int a){return a-1;},
+//    [](int a){return a+1;},
+//    [](int a){return a*2;}
+//};
+//int n, k, cnt=0, t=0; // n: 수빈, k: 동생, cnt: 갯수, t: 시간
+//bool visited[MAX+1] = { false, };
+//queue<int> q;
+//
+//int main() {
+//    void bfs(int idx);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> k;
+//
+//    if(n == k) {
+//        cout << t << endl;
+//        cout << 1 << endl;
+//        exit(0);
+//    }
+//
+//    q.push(n);
+//    bfs(n);
+//
+//
+//}
+//
+//void bfs(int idx) {
+//    while(!q.empty()) {
+//
+//        int size = q.size();
+//
+//        for(int i=0; i<size; i++) {
+//            int front = q.front(); q.pop();
+//            visited[front] = true;
+//
+//            if(front == k)
+//                cnt++;
+//
+//            for(int j=0; j<3; j++) {
+//                int newN = operation[j](front);
+//
+//                if(newN < 0 || newN > MAX+1) continue;
+//                if(newN != k && visited[newN]) continue;
+//
+////                visited[newN] = true;
+//                /*
+//                 여기서 visited를 체크하면,
+//                 +1, *2 의 결과가 같은 경우에
+//                 예를 들면 입력이 1 4 인 경우를 가정한다면 1-2(1+1)-3-4, 또는 1-2(1*2)-3-4 라는 경우의 수가 생기는데
+//                 이들을 각각 하나로 생각을 해야 하지만, 그렇게 생각하지를 못한다.
+//                 따라서 추가할 때가 아닌, pop할 때 visited를 체크해주어야 한다.
+//                 */
+//
+//                q.push(newN);
+//            }
+//        }
+//
+//        if(cnt > 0) {
+//            cout << t << endl;
+//            cout << cnt << endl;
+//            exit(0);
+//        }
+//        t++;
+//    }
+//}
+//
+
+// 13913 숨바꼭질 4
+//#include <iostream>
+//#include <vector>
+//#include <utility>
+////
+//#define MAX 100001
+////
+//using namespace std;
+//
+//int (*operation[3])(int) = {
+//    [](int a){return a-1;},
+//    [](int a){return a+1;},
+//    [](int a){return a*2;}
+//};
+//int n, k, t=0;
+//bool visited[MAX] = {false, };
+//vector<pair<int, int>> v[MAX];
+//vector<pair<int, int>> path;
+//
+//int main() {
+//    void bfs(int idx);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> k;
+//
+//    v[0].push_back(make_pair(0, n));
+//    visited[n] = true;
+//    bfs(n);
+//}
+//
+//void bfs(int idx) {
+//    void trace();
+//
+//    while(true) {
+//        int size = v[t].size();
+//
+//        for(int i=0; i<size; i++) {
+//            int preVal = v[t][i].second;
+//
+//            if(preVal == k){
+//                int prePos = v[t][i].first;
+//
+//                path.push_back(make_pair(prePos, preVal));
+//                trace();
+//            }
+//
+//            for(int j=0; j<3; j++) {
+//                int newN = operation[j](preVal);
+//
+//                if(newN < 0 || newN > MAX) continue;
+//                if(visited[newN]) continue;
+//
+//                v[t+1].push_back(make_pair(i, newN));
+//                visited[newN] = true;
+//            }
+//
+//        }
+//        t++;
+//    }
+//}
+//
+//void trace() {
+//    for(int i=1; i<t+1; i++) {
+//        int prePos = path[i-1].first;
+//        pair<int, int> newPair = v[t-(i)][prePos];
+//        path.push_back(newPair);
+//    }
+//
+//    reverse(path.begin(), path.end());
+//
+//    cout << t << "\n";
+//    for(int i=0; i<t+1; i++) {
+//        cout << path[i].second << " ";
+//    }
+//
+//    exit(0);
+//}
+/*
+ path를 알기 위해선, t 시점의 점들의 정보를 알고 있어야 한다. 따라서 앞서 문제들에서 queue로 저장했던 것들을 []vector 로 저장하였다.
+ queue가 아니라 vector인 이유는, 임의의 점에서 다음 점(-1, +1, *2)으로 넘어갈 때 앞서 문제들처럼 pop을 하는 것이 아니라 index로 접근할 때 queue보다 vector가 보다 쉽게 접근할 수 있기 때문이었다.
+ */
+
+
+// 13549 숨바꼭질 3
+// queue
+//#include <iostream>
+//#include <vector>
+//#include <functional>
+//#include <queue>
+//#include <utility>
+//
+//#define MAX 100001
+//
+//using namespace std;
+//
+//int (*operation[3])(int) = {
+//    [](int a){return a*2;},
+//    [](int a){return a-1;},
+//    [](int a){return a+1;}
+//};
+//int n, k; // n: 수빈, k: 동생
+//
+//queue<pair<int, int>> q;
+//bool visited[MAX] = {false, };
+//
+//int main() {
+//    void bfs(int idx);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> k;
+//
+//    visited[n] = true;
+//    q.push(make_pair(0, n)); // 위치, 시간
+//    bfs(n);
+//
+//}
+//
+//void bfs(int idx) {
+//    while(!q.empty()) {
+//
+//        int size = q.size();
+//
+//        for(int i=0; i<size; i++) {
+//            int prevTime = q.front().first;
+//            int prevLoc = q.front().second;
+//
+//            //            cout << prevTime << ", " << prevLoc << endl;
+//
+//            if(prevLoc == k) {
+//                cout << prevTime << endl;
+//                exit(0);
+//            }
+//
+//            q.pop();
+//
+//            for(int j=0; j<3; j++) {
+//                int newLoc = operation[j](prevLoc);
+//                int newTime;
+//
+//                if(newLoc < 0 || newLoc > MAX) continue;
+//                if(visited[newLoc]) continue;
+//
+//                if(j == 0)
+//                    newTime = prevTime;
+//
+//                else if(j == 1 || j == 2)
+//                    newTime = prevTime + 1;
+//
+//                q.push(make_pair(newTime, newLoc));
+//                visited[newLoc] = true;
+//
+//            }
+//        }
+//    }
+//}
+
+// priority queue
+//#include <iostream>
+//#include <vector>
+//#include <functional>
+//#include <queue>
+//#include <utility>
+//
+//#define MAX 100001
+//
+//using namespace std;
+//
+//int (*operation[3])(int) = {
+//    [](int a){return a*2;},
+//    [](int a){return a-1;},
+//    [](int a){return a+1;}
+//};
+//int n, k; // n: 수빈, k: 동생
+//
+//priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+//bool visited[MAX] = {false, };
+//
+//int main() {
+//    void bfs(int idx);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> n >> k;
+//
+//    visited[n] = true;
+//    q.push(make_pair(0, n)); // 위치, 시간
+//    bfs(n);
+//
+//}
+//
+//void bfs(int idx) {
+//    while(!q.empty()) {
+//
+//        int size = q.size();
+//
+//        for(int i=0; i<size; i++) {
+//            int prevTime = q.top().first;
+//            int prevLoc = q.top().second;
+//
+//
+//            //            cout << prevTime << ", " << prevLoc << endl;
+//
+//            if(prevLoc == k) {
+//                cout << prevTime << endl;
+//                exit(0);
+//            }
+//
+//            q.pop();
+//
+//            for(int j=0; j<3; j++) {
+//                int newLoc = operation[j](prevLoc);
+//                int newTime;
+//
+//                if(newLoc < 0 || newLoc > MAX) continue;
+//                if(visited[newLoc]) continue;
+//
+//                if(j == 0)
+//                    newTime = prevTime;
+//
+//                else if(j == 1 || j == 2)
+//                    newTime = prevTime + 1;
+//
+//                q.push(make_pair(newTime, newLoc));
+//                visited[newLoc] = true;
+//
+//            }
+//        }
+//    }
+//}
+
+/*
+ 수잘알 준호쓰가 우선순위 큐를 쓰지 않고 푸는 방법을 제안해서 풀어봤다. 다시 풀어보니, 우선순위 큐의 사용 유무 보다는 연산 시 순서가 더 중요했다.
+ 왜냐하면, *2, -1, +1 순서대로 새로운 좌표를 계산했을 때 어떤 큐를 사용하더라도 올바르게 답이 나왔기 때문이다.
+ 
+ 둘의 차이는 성능이었다. 우선순위 큐를 썼을 때의 성능이 그냥 큐를 썼을 때 보다 성능이 조금 더 낮게 나왔다. (+ 248KB, + 8ms)
+ 따라서 쓰지 않을 수 있다면 쓰지 않는 것이 성능에 더 좋은 것 같다.
+*/
+

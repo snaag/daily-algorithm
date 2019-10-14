@@ -745,3 +745,217 @@
  따라서 쓰지 않을 수 있다면 쓰지 않는 것이 성능에 더 좋은 것 같다.
 */
 
+// 17071 숨바꼭질 5
+// 난이도가 많이 높으니 다음에 풀으렴
+//#include <iostream>
+//#include <queue>
+//
+//#define MAX 500000
+//
+//using namespace std;
+//
+//bool visited[2][MAX+1] = {false,};
+//queue<int> q;
+//int n, k, t=0; // k: 동생
+//int (*operation[3])(int) = {
+//    [](int a){return a-1;},
+//    [](int a){return a+1;},
+//    [](int a){return a*2;}
+//};
+//
+//int main() {
+//    void bfs(int idx);
+//
+//    cin >> n >> k;
+//
+//    if (n >= MAX || k >= MAX) {
+//        cout << -1;
+//        exit(0);
+//    }
+//
+//    q.push(n);
+//    bfs(n);
+//
+//    cout << -1;
+//}
+//
+//void bfs(int idx) {
+//
+//    while(q.size()) {
+//        k = k + t;
+//        int size = q.size();
+//
+//        for(int i=0; i<size; i++) {
+//
+//            // 1 time
+//            int front = q.front(); q.pop();
+//            if(front == k) {
+//                cout << t << endl;
+//                exit(0);
+//            }
+//
+//            if(visited[t%2][front]) continue;
+//            visited[t%2][front] = true;
+//
+//            for(int j=0; j<3; j++) {
+//                int newN = operation[j](front); // 수빈이의 새로운 위치
+//
+//                if(newN > MAX || newN < 0) continue;
+//
+//                q.push(newN);
+//            }
+//
+//        }
+//        t = t + 1;
+//    }
+//}
+
+// 17087 숨바꼭질 6
+// (1)
+//#include <iostream>
+//#include <vector>
+//#include <queue>
+//#include <algorithm>
+//
+//#define MAX 1000000001
+//
+//using namespace std;
+//int n, cntS, nBtwMax; // n: 수빈이 위치, cntS: 동생 명수, nBtw: n, cntS, vS 의 사이 값 중 최댓값
+//
+//vector<int> vS; // 동생 위치가 저장되어있는 vector
+//queue<int> q;
+//unsigned int visited; // 앞서 사용했던 visited array와 같은 역할을 비트연산자로 수행할 것이다
+//int coor[2] = {-1, +1};
+//bool ok = true;
+//
+//int main() {
+//    int getBtw();
+//    void bfs(int dist);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    // 초기화
+//    cin >> cntS >> n;
+//    for(int i=0; i<cntS; i++) {
+//        int tmp;
+//        cin >> tmp;
+//        vS.push_back(tmp);
+//    }
+//    nBtwMax = getBtw();
+//
+//    for(int i=nBtwMax; i>0; i--) {
+//        std::queue<int> empty; // q 초기화 (사이즈가 0인 queue와 바꿔치기)
+//        std::swap(q, empty);
+//        visited = 0; // visited 초기화
+//        ok = true; // ok 초기화
+//
+//        q.push(n);
+//        visited = visited | (1 << n);
+//        bfs(i);
+//
+//        if(!ok) {
+//            cout << i;
+//            exit(0);
+//        }
+//
+//    }
+//}
+//
+//int getBtw() {
+//    int ret=MAX;
+//
+//    auto min = min_element(vS.begin(), vS.end());
+//
+//    for(int i=0; i<cntS; i++) { // 동생들의 위치 vector 에서 가장 작은 사잇값 구하기
+//        if(*min == vS[i]) continue;
+//        if(abs(*min - vS[i]) < ret)
+//            ret = abs(*min - vS[i]);
+//    }
+//
+//    if(ret > n - *min) { // 수빈이의 위치-min 했을 때, 이 값이 위에서 구한 값보다 작다면, 그 값을 return 하기
+//        ret = abs(n - *min);
+//    }
+//
+//    return ret;
+//}
+//
+//void bfs(int dist) {
+//    int findCount = 0;
+//    while(q.size() && ok) {
+//        int size = q.size();
+//
+//        for(int i=0; i<size; i++) {
+//            int front = q.front(); q.pop();
+//
+//            if(std::find(vS.begin(), vS.end(), front) != vS.end())
+//                findCount = findCount + 1;
+//
+//            if(findCount == cntS) {
+//                ok = false;
+//            }
+//
+//            for(int j=0; j<2; j++) {
+//                int newN = front + dist*coor[j];
+//
+//                if(newN > MAX || newN < 0) continue;
+//                if(visited & (1 << newN)) continue;
+//
+//                visited = visited | (1 << newN);
+//                q.push(newN);
+//            }
+//
+//        }
+//    }
+//}
+
+/*
+ 수빈이의 위치, 동생들의 위치 사이의 값들의 최솟값 btwMin를 칮아, btwMin이 0이 될 때 까지 bfs를 수행한다.
+ 접근은 좋았다고 생각이들지만 지나치게 많은 작업이 필요하다. 따라서 다른 방법을 생각하기로 했다.
+ */
+
+//#include <iostream>
+//#include <vector>
+//
+//using namespace std;
+//
+//int subin, nBro;
+//vector<int> vDif;
+//
+//int main() {
+//    int findGcd(vector<int> v, int n);
+//
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    cin >> nBro >> subin;
+//    for(int i=0; i<nBro; i++) {
+//        int t;
+//        cin >> t;
+//        vDif.push_back(abs(subin-t));
+//    }
+//
+//    cout << findGcd(vDif, nBro) << endl;
+//}
+//
+//int gcd(int a, int b) {
+//    while (b != 0)
+//    {
+//        int temp = b;
+//        b = a % b;
+//        a = temp;
+//    }
+//    return a;
+//}
+//
+//int findGcd(vector<int> v, int n) {
+//    int ret = v[0];
+//
+//    for(int i=1; i<n; i++) {
+//        ret = gcd(v[i], ret);
+//    }
+//
+//    return ret;
+//}

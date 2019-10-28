@@ -959,3 +959,175 @@
 //
 //    return ret;
 //}
+
+//
+//#include <iostream>
+//
+//using namespace std;
+//
+//int main() {
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//
+//    int reward1(int n);
+//    int reward2(int n);
+//
+//    int n;
+//    cin >> n;
+//
+//    for(int i=0; i<n; i++) {
+//        int a, b;
+//        cin >> a >> b;
+//        cout << reward1(a)+reward2(b) << "\n";
+//    }
+//}
+//
+//int reward1(int n) {
+//    if (n == 0)
+//        return 0;
+//    else if(n <= 1)
+//        return 5000000;
+//    else if(n <= 3)
+//        return 3000000;
+//    else if(n <= 6)
+//        return 2000000;
+//    else if(n <= 10)
+//        return 500000;
+//    else if(n <= 15)
+//        return 300000;
+//    else if(n <= 21)
+//        return 100000;
+//
+//    return 0;
+//}
+//
+//int reward2(int n) {
+//    if (n == 0)
+//        return 0;
+//    else if(n <= 1)
+//        return 5120000;
+//    else if(n <= 3)
+//        return 2560000;
+//    else if(n <= 7)
+//        return 1280000;
+//    else if(n <= 15)
+//        return 640000;
+//    else if(n <= 31)
+//        return 320000;
+//    return 0;
+//}
+
+// 11047 동전 0
+//#include <iostream>
+//#include <vector>
+//
+//using namespace std;
+//
+//int main() {
+//    int n, k, cnt=0;
+//    vector<int> vCoin;
+//
+//    cin >> n >> k;
+//
+//    // coin 종류
+//    for(int i=0; i<n; i++) {
+//        int temp;
+//        cin >> temp;
+//        vCoin.push_back(temp);
+//    }
+//
+//    // 계산
+//    while(k) {
+//        for(int i=n-1; i>-1; i--) {
+//            if(k >= vCoin[i]) {
+//                cnt += k/vCoin[i];
+//                k = k % vCoin[i];
+//                break;
+//            }
+//        }
+//    }
+//    cout << cnt << endl;
+//}
+
+// 4307 개미
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//using namespace std;
+//
+//int tc;
+//
+//int main() {
+//    cin >> tc;
+//
+//    for(int t=0; t<tc; t++) {
+//        vector<int> vMax, vMin;
+//        int l, n;
+//        cin >> l >> n;
+//
+//        for(int i=0; i<n; i++) {
+//            int ant;
+//            cin >> ant;
+//
+//            vMax.push_back(max(ant, l-ant));
+//            vMin.push_back(min(ant, l-ant));
+//        }
+//
+//        cout << *max_element(vMin.begin(), vMin.end()) << " " << *max_element(vMax.begin(), vMax.end()) << "\n";
+//    }
+//}
+
+
+// 1049 기타줄
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//#define MAX 1001
+//
+//using namespace std;
+//
+//int main() {
+//    ios_base :: sync_with_stdio(false);
+//    cin.tie(NULL);
+//    cout.tie(NULL);
+//    int mok(int cnt);
+//
+//    int n, m;
+//    vector<int> vSet;
+//    vector<int> vOne;
+//
+//    cin >> n >> m;
+//
+//    for(int i=0; i<m; i++) {
+//        int set, one;
+//        cin >> set >> one;
+//        vSet.push_back(set);
+//        vOne.push_back(one);
+//    }
+//
+//    vector<int> ::iterator minSet = min_element(vSet.begin(), vSet.end());
+//    vector<int> ::iterator minOne = min_element(vOne.begin(), vOne.end());
+//
+//    int priceSet = *minSet * mok(n); // set로 모두 구매했을 때
+//    int priceOne = *minOne * n; // 낱개로 모두 구매했을 때
+//    int priceMix = *minSet * (n/6) + *minOne * (n%6); // 섞어서 구매했을 때
+//
+//    cout << min(min(priceSet, priceOne), priceMix) << "\n";
+//}
+//
+//int mok(int cnt) {
+//    int ret = 0;
+//
+//    if(cnt % 6 > 0)
+//        ret += 1;
+//    ret += cnt/6;
+//
+//    return ret;
+//}
+/*
+ 섞어서 구매할 수도 있다는 점을 놓쳐서 조금 당황했던 문제이다.
+ */
+

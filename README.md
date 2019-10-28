@@ -6,19 +6,20 @@
 
 ## Contents
 
-### Ch2 완전 탐색 0
-* 비트마스크
-* 순열
-### Ch3 완전 탐색 1
-* Brute Force
-* 순열
-### Ch4 완전 탐색 2
-### Ch5 다이나믹 프로그래밍 1
-### Ch6 다이나믹 프로그래밍
-
-## 몰랐던 것 기록하기
-* [note](./note.md)
+* 백준 강의
+  * Ch2 완전 탐색 0
+  * Ch3 완전 탐색 1
+* 백준 문제집
+  * DFS와 BFS
+  * jh05013 Edition pt.2
 
 ## 푼 문제 정리
-* [solutions - Ch2 완전 탐색 0](./solutions/ch2_완전_탐색_0.md)
-* [solutions - Ch3 완전 탐색 1](./solutions/ch3_완전_탐색_1.md)
+### 백준 강의
+
+* [Ch2 완전 탐색 0](./solutions/1_ch2_완전_탐색_0.md)
+* [Ch3 완전 탐색 1](./solutions/2_ch3_완전_탐색_1.md)
+
+### 백준 문제집
+
+* [DFS와 BFS](./solutions/3_DFS_BFS.md)
+* [jh05013 Edition pt.2](./solutions/4_jh05013_Edition_pt2.md)
